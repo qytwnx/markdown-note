@@ -10,6 +10,10 @@ const router = createHashRouter([
       {
         index: true,
         Component: lazy(() => import('@renderer/views/welcome'))
+      },
+      {
+        path: 'note',
+        Component: lazy(() => import('@renderer/views/note'))
       }
     ]
   }

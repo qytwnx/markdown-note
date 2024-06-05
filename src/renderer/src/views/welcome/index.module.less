@@ -1,7 +1,7 @@
 .welcome-container {
   @apply w-full h-full p-2 select-none;
   .welcome-container-title {
-    @apply w-full text-center text-3xl font-bold mt-12;
+    @apply w-full text-center text-3xl pt-5 font-bold;
   }
   .welcome-container-description {
     @apply w-full text-center my-2;
@@ -9,7 +9,7 @@
   .welcome-container-operate {
     @apply w-full my-4 flex flex-row items-center justify-center gap-4;
     .welcome-container-operate-item {
-      @apply flex items-center justify-center gap-2 border py-4 px-6 rounded-lg cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-800;
+      @apply w-52 flex items-center justify-center gap-2 border py-4 px-6 rounded-lg cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-800;
     }
   }
   .welcome-container-recent {
@@ -57,5 +57,8 @@
         }
       }
     }
+  }
+  .welcome-container-footer {
+    @apply w-full mt-6;
   }
 }

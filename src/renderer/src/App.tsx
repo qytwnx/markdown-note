@@ -25,9 +25,9 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <div className="w-screen h-screen">
+      <div className="w-full h-full">
         <Header />
-        <div className="w-full h-[calc(100vh-39px)] overflow-auto">
+        <div className="w-full h-[calc(100vh-39px)] overflow-x-hidden overflow-y-auto z-50">
           <Suspense fallback={<PageLoading />}>
             <Outlet />
           </Suspense>

@@ -1,7 +1,25 @@
+import Footer from '@renderer/components/footer';
 import styles from './index.module.less';
-import { VscFolder, VscNewFile, VscFile, VscClose } from 'react-icons/vsc';
+import {
+  VscFolder,
+  VscNewFile,
+  VscFile,
+  VscClose,
+  VscNewFolder
+} from 'react-icons/vsc';
+import { useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
+  const navigate = useNavigate();
+
+  const handleOpenNote = async () => {
+    const content = await window.api.chooseFileMdContent();
+    console.log(content);
+    if (content) {
+      navigate('/note', { state: { content } });
+    }
+  };
+
   return (
     <>
       <div className={styles['welcome-container']}>
@@ -11,11 +29,23 @@ const Welcome = () => {
         </div>
         <div className={styles['welcome-container-operate']}>
           <div className={styles['welcome-container-operate-item']}>
-            <VscFolder /> <span>Open File or Folder</span>
+            <VscFolder /> <span>Open Work Space</span>
+          </div>
+          <div className={styles['welcome-container-operate-item']}>
+            <VscNewFolder />
+            <span>New Work Space</span>
+          </div>
+        </div>
+        <div className={styles['welcome-container-operate']}>
+          <div
+            className={styles['welcome-container-operate-item']}
+            onClick={() => handleOpenNote()}
+          >
+            <VscFile /> <span>Open Note</span>
           </div>
           <div className={styles['welcome-container-operate-item']}>
             <VscNewFile />
-            <span>New Temporary File</span>
+            <span>New Note</span>
           </div>
         </div>
         <div className={styles['welcome-container-recent']}>
@@ -112,6 +142,9 @@ const Welcome = () => {
               />
             </div>
           </div>
+        </div>
+        <div className={styles['welcome-container-footer']}>
+          <Footer />
         </div>
       </div>
     </>

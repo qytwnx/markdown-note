@@ -7,6 +7,7 @@ declare global {
       openExternal: (url: string) => void;
       themeDarkToggle: (mode: 'light' | 'dark') => Promise<boolean>;
       themeDarkStatus: () => Promise<boolean>;
+      chooseFileMdContent: () => Promise<string>;
     };
   }
 }

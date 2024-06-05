@@ -2,7 +2,11 @@ import { app, BrowserWindow } from 'electron';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { createWindow } from './config';
 import { MainWindowOptions } from './constants';
-import { registerOpenExternal, registerTheme } from './ipc';
+import {
+  registerExternalOperate,
+  registerThemeOperate,
+  registerFileOperate
+} from './ipc';
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -19,8 +23,9 @@ app.whenReady().then(() => {
   });
 
   const mainWindow = createWindow(MainWindowOptions);
-  registerOpenExternal();
-  registerTheme(mainWindow);
+  registerExternalOperate();
+  registerThemeOperate(mainWindow);
+  registerFileOperate(mainWindow);
   if (is.dev) {
     mainWindow.webContents.openDevTools();
   }

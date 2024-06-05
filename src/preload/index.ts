@@ -11,6 +11,9 @@ const api = {
   },
   themeDarkStatus: (): Promise<boolean> => {
     return ipcRenderer.invoke('theme:dark:status');
+  },
+  chooseFileMdContent: (): Promise<string> => {
+    return ipcRenderer.invoke('choose:file:md:content');
   }
 };
 
