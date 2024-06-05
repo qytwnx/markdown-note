@@ -1,35 +1,40 @@
-import Versions from './components/Versions';
-import electronLogo from './assets/electron.svg';
+import { Suspense, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import PageLoading from '@renderer/components/page-loading';
+import Header from '@renderer/components/header';
+import { useAppStore } from '@renderer/store';
 
-function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping');
+const App = (): JSX.Element => {
+  const [isDark, setIsDark] = useAppStore((state) => [
+    state.isDark,
+    state.setIsDark
+  ]);
+
+  const handleLoadThemeDarkStatus = async () => {
+    if (isDark !== undefined) {
+      window.api.themeDarkToggle(isDark ? 'dark' : 'light');
+      return;
+    }
+    const status = await window.api.themeDarkStatus();
+    setIsDark(status);
+  };
+
+  useEffect(() => {
+    handleLoadThemeDarkStatus();
+  }, []);
 
   return (
     <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
+      <div className="w-screen h-screen">
+        <Header />
+        <div className="w-full h-[calc(100vh-39px)] overflow-auto">
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
         </div>
       </div>
-      <Versions></Versions>
     </>
   );
-}
+};
 
 export default App;

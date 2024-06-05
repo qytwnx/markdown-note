@@ -1,8 +1,18 @@
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
 // Custom APIs for renderer
-const api = {};
+const api = {
+  openExternal: (url: string): void => {
+    ipcRenderer.send('open:external', url);
+  },
+  themeDarkToggle: (mode: 'light' | 'dark'): Promise<boolean> => {
+    return ipcRenderer.invoke('theme:dark:toggle', mode);
+  },
+  themeDarkStatus: (): Promise<boolean> => {
+    return ipcRenderer.invoke('theme:dark:status');
+  }
+};
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
