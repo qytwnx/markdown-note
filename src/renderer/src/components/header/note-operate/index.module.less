@@ -1,0 +1,13 @@
+.note-operate-container {
+  @apply py-1 px-4 flex items-center gap-2 bg-gray-300 dark:bg-gray-600 rounded-lg;
+  -webkit-app-region: no-drag;
+  .note-operate-container-name {
+    @apply flex-1 overflow-hidden whitespace-nowrap text-ellipsis;
+  }
+  .note-operate-container-close {
+    @apply size-6 cursor-pointer;
+    &:hover {
+      @apply text-red-600;
+    }
+  }
+}

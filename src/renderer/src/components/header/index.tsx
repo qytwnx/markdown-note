@@ -3,8 +3,11 @@ import LogoSvg from '@renderer/assets/images/logo.svg';
 import { useAppStore } from '@renderer/store';
 import { FaGithub } from 'react-icons/fa';
 import { MdBrightnessHigh, MdBrightness4 } from 'react-icons/md';
+import NoteOperate from './note-operate';
+import { useLocation } from 'react-router-dom';
 
 const Header = () => {
+  const location = useLocation();
   const [isDark, setIsDark] = useAppStore((state) => [
     state.isDark,
     state.setIsDark
@@ -18,11 +21,14 @@ const Header = () => {
   return (
     <>
       <div className={styles['header-container']}>
-        <img
-          src={LogoSvg}
-          alt="logo"
-          className={styles['header-container-logo']}
-        />
+        <div className={styles['header-container-information']}>
+          <img
+            src={LogoSvg}
+            alt="logo"
+            className={styles['header-container-information-logo']}
+          />
+          {location.pathname === '/note' && <NoteOperate />}
+        </div>
         <div className={styles['header-container-operate']}>
           <FaGithub
             className={styles['header-container-operate-item']}

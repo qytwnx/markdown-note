@@ -7,7 +7,10 @@ declare global {
       openExternal: (url: string) => void;
       themeDarkToggle: (mode: 'light' | 'dark') => Promise<boolean>;
       themeDarkStatus: () => Promise<boolean>;
-      chooseFileMdContent: () => Promise<string>;
+      chooseFileMdContent: () => Promise<NoteModel | undefined>;
+      readFileMdContent: (filePath: string) => Promise<NoteModel | undefined>;
+      createFileMd: (fileName: string) => Promise<NoteModel | undefined>;
+      writeFileMdContent: (fileInfo: NoteModel) => Promise<NoteModel>;
     };
   }
 }

@@ -26,9 +26,13 @@
     "@vavt/rt-extension": "^1.2.2",
     "dayjs": "^1.11.11",
     "electron-updater": "^6.1.7",
-    "md-editor-rt": "^4.16.3",
+    "highlight.js": "^11.9.0",
+    "katex": "^0.16.10",
+    "md-editor-rt": "^4.15.5",
+    "mermaid": "^10.9.1",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
+    "screenfull": "^6.0.2",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

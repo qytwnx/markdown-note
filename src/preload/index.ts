@@ -12,8 +12,17 @@ const api = {
   themeDarkStatus: (): Promise<boolean> => {
     return ipcRenderer.invoke('theme:dark:status');
   },
-  chooseFileMdContent: (): Promise<string> => {
+  chooseFileMdContent: (): Promise<NoteModel | undefined> => {
     return ipcRenderer.invoke('choose:file:md:content');
+  },
+  readFileMdContent: (filePath: string): Promise<NoteModel | undefined> => {
+    return ipcRenderer.invoke('read:file:md:content', filePath);
+  },
+  createFileMd: (fileName: string): Promise<NoteModel | undefined> => {
+    return ipcRenderer.invoke('create:file:md', fileName);
+  },
+  writeFileMdContent: (fileInfo: NoteModel): Promise<NoteModel> => {
+    return ipcRenderer.invoke('write:file:md:content', fileInfo);
   }
 };
 

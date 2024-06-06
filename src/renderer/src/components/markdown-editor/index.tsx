@@ -1,36 +1,72 @@
-import { useState } from 'react';
-import { MdEditor } from 'md-editor-rt';
-import { Emoji, Mark, ExportPDF } from '@vavt/rt-extension';
+import { useEffect, useState } from 'react';
+import { MdEditor, config } from 'md-editor-rt';
 import TimeNow from '@renderer/components/utils/time-now';
-// import './index.less';
 import { useAppStore } from '@renderer/store';
 import 'md-editor-rt/lib/style.css';
-import '@vavt/rt-extension/lib/asset/style.css';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+import mermaid from 'mermaid';
+import highlight from 'highlight.js';
+import screenfull from 'screenfull';
+import './iconfont.js';
+import 'highlight.js/styles/atom-one-dark.min.css';
+import 'highlight.js/styles/atom-one-light.min.css';
+import './index.less';
 
-const MarkdownEditor = () => {
-  const [text, setText] = useState('hello md-editor-rt！');
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+  onSave: (value: string) => void;
+}
+
+config({
+  editorExtensions: {
+    highlight: {
+      instance: highlight,
+      css: {
+        atom: {
+          dark: 'highlight.js/styles/atom-one-dark.min.css',
+          light: 'highlight.js/styles/atom-one-light.min.css'
+        }
+      }
+    },
+    katex: {
+      instance: katex
+    },
+    mermaid: {
+      instance: mermaid
+    },
+    screenfull: {
+      instance: screenfull
+    }
+  }
+});
+
+const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
+  const [text, setText] = useState('');
   const isDark = useAppStore((state) => state.isDark);
+
+  useEffect(() => {
+    setText(value);
+  }, [value]);
 
   return (
     <>
       <MdEditor
+        placeholder="Please enter markdown content"
         theme={isDark ? 'dark' : 'light'}
         language="en-US"
+        className="markdown-editor-container"
         previewTheme={'vuepress'}
+        codeTheme="atom-one-dark"
         modelValue={text}
         autoDetectCode
-        noIconfont={true}
-        defToolbars={[
-          <Mark key="mark-extension" />,
-          <Emoji key="emoji-extension" />,
-          <ExportPDF key="ExportPDF" modelValue={text} height="700px" />
-        ]}
-        onSave={(v, h) => {
-          console.log('v', v);
-
-          h.then((html) => {
-            console.log('h', html);
-          });
+        noIconfont
+        noUploadImg
+        noImgZoomIn
+        noPrettier
+        onSave={(value: string) => {
+          onSave(value);
         }}
         toolbars={[
           'bold',
@@ -52,22 +88,17 @@ const MarkdownEditor = () => {
           'table',
           'mermaid',
           'katex',
-          0,
-          1,
-          2,
-          3,
           '-',
           'revoke',
           'next',
           'save',
           '=',
-          'prettier',
           'preview',
           'previewOnly',
           'htmlPreview',
           'catalog'
         ]}
-        onChange={(value: string) => setText(value)}
+        onChange={(value: string) => onChange(value)}
         footers={['markdownTotal', '=', 0, 'scrollSwitch']}
         defFooters={[<TimeNow key="time-now" />]}
       />
