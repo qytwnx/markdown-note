@@ -90,7 +90,7 @@ const CatalogueItem = ({
                 }
               }
             ],
-            { className: styles['contextMenu'] }
+            { className: styles['context-menu'] }
           )}
           onClick={() => {
             if (data.type === ResourceTypeEnum.FOLDER) {
