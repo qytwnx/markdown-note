@@ -9,18 +9,25 @@ import styles from './index.module.less';
 import { ResourceTypeEnum } from '@renderer/enums/common';
 import { useEffect, useState } from 'react';
 import { useContextMenu } from 'mantine-contextmenu';
+import CatalogueCreateModal from './catalogue-create-modal';
 
 interface Props {
   item: WorkspaceModel;
   currentWorkspaceNote: WorkspaceModel;
   onCurrentWorkspaceNoteChange: (current: WorkspaceModel) => void;
+  reload: () => void;
 }
 
 const CatalogueItem = ({
   item,
   currentWorkspaceNote,
-  onCurrentWorkspaceNoteChange
+  onCurrentWorkspaceNoteChange,
+  reload
 }: Props) => {
+  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  const [newResourceType, setNewResourceType] = useState<ResourceTypeEnum>(
+    ResourceTypeEnum.FOLDER
+  );
   const [data, setData] = useState<WorkspaceModel>({
     name: '',
     path: '',
@@ -50,6 +57,25 @@ const CatalogueItem = ({
     setData(tree);
   };
 
+  const handleRemove = async () => {
+    if (!data) {
+      return;
+    }
+    if (ResourceTypeEnum.FOLDER === data.type) {
+      const res = window.api.deleteFolder(data.path);
+      if (!res) {
+        return;
+      }
+      reload();
+    } else if (ResourceTypeEnum.FILE === data.type) {
+      const res = window.api.deleteNote(data.path);
+      if (!res) {
+        return;
+      }
+      reload();
+    }
+  };
+
   useEffect(() => {
     setData({ ...item });
     handleExpandFolder(item);
@@ -64,32 +90,41 @@ const CatalogueItem = ({
             data?.path === currentWorkspaceNote?.path ? styles['active'] : ''
           ].join(' ')}
           onContextMenu={showContextMenu(
-            [
-              {
-                key: 'delete',
-                icon: <VscTrash size={16} />,
-                title: 'Delete',
-                onClick: () => {
-                  console.log('delete');
-                }
-              },
-              {
-                key: 'New Folder',
-                icon: <VscNewFolder size={16} />,
-                title: 'New Folder',
-                onClick: () => {
-                  console.log('New Folder');
-                }
-              },
-              {
-                key: 'New Note',
-                icon: <VscNewFile size={16} />,
-                title: 'New Note',
-                onClick: () => {
-                  console.log('New Note');
-                }
-              }
-            ],
+            ResourceTypeEnum.FOLDER === data.type
+              ? [
+                  {
+                    key: 'delete',
+                    icon: <VscTrash size={16} />,
+                    title: 'Delete',
+                    onClick: () => handleRemove()
+                  },
+                  {
+                    key: 'New Folder',
+                    icon: <VscNewFolder size={16} />,
+                    title: 'New Folder',
+                    onClick: () => {
+                      setNewResourceType(ResourceTypeEnum.FOLDER);
+                      setCreateModalVisible(true);
+                    }
+                  },
+                  {
+                    key: 'New Note',
+                    icon: <VscNewFile size={16} />,
+                    title: 'New Note',
+                    onClick: () => {
+                      setNewResourceType(ResourceTypeEnum.FILE);
+                      setCreateModalVisible(true);
+                    }
+                  }
+                ]
+              : [
+                  {
+                    key: 'delete',
+                    icon: <VscTrash size={16} />,
+                    title: 'Delete',
+                    onClick: () => handleRemove()
+                  }
+                ],
             { className: styles['context-menu'] }
           )}
           onClick={() => {
@@ -128,11 +163,24 @@ const CatalogueItem = ({
                 item={child}
                 currentWorkspaceNote={currentWorkspaceNote}
                 onCurrentWorkspaceNoteChange={onCurrentWorkspaceNoteChange}
+                reload={reload}
               />
             ))}
           </div>
         )}
       </div>
+      <CatalogueCreateModal
+        modalVisible={createModalVisible}
+        resourceType={newResourceType}
+        basePath={data.path}
+        onSubmit={() => {
+          reload();
+          setCreateModalVisible(false);
+        }}
+        onCancel={() => {
+          setCreateModalVisible(false);
+        }}
+      />
     </>
   );
 };

@@ -20,6 +20,11 @@ export default (win: BrowserWindow): void => {
   );
   ipcMain.handle('theme:dark:status', () => {
     const status = nativeTheme.shouldUseDarkColors;
+    win?.setTitleBarOverlay({
+      color: status ? '#000000' : '#F0F0F0',
+      symbolColor: status ? '#FFFFFF' : '#000000',
+      height: 38
+    });
     return status;
   });
 };

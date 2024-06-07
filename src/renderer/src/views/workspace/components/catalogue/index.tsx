@@ -80,6 +80,7 @@ const Catalogue = ({
                 item={item}
                 currentWorkspaceNote={currentWorkspaceNote}
                 onCurrentWorkspaceNoteChange={onCurrentWorkspaceNoteChange}
+                reload={() => handleLoadWorkspaceContent()}
               />
             )
           )}
