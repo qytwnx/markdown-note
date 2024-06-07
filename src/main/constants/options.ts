@@ -18,7 +18,6 @@ export const MainWindowOptions: BrowserWindowConstructorOptions & {
   },
   webPreferences: {
     preload: join(__dirname, '../preload/index.js'),
-    sandbox: false,
-    webSecurity: false
+    sandbox: false
   }
 };

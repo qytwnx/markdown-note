@@ -7,10 +7,24 @@ declare global {
       openExternal: (url: string) => void;
       themeDarkToggle: (mode: 'light' | 'dark') => Promise<boolean>;
       themeDarkStatus: () => Promise<boolean>;
-      chooseFileMdContent: () => Promise<NoteModel | undefined>;
-      readFileMdContent: (filePath: string) => Promise<NoteModel | undefined>;
-      createFileMd: (fileName: string) => Promise<NoteModel | undefined>;
-      writeFileMdContent: (fileInfo: NoteModel) => Promise<NoteModel>;
+      checkNoteExist: (filePath: string) => Promise<boolean>;
+      chooseNote: () => Promise<RecentModel | undefined>;
+      createNote: (fileName: string) => Promise<RecentModel | undefined>;
+      createNoteNoDialog: (basePath: string, name: string) => Promise<boolean>;
+      readNote: (filePath: string) => Promise<NoteModel | undefined>;
+      writeNote: (fileInfo: NoteModel) => Promise<NoteModel>;
+      deleteNote: (filePath: string) => Promise<boolean>;
+      checkWorkspaceExist: (folderPath: string) => Promise<boolean>;
+      chooseWorkspace: () => Promise<RecentModel | undefined>;
+      createWorkspace: () => Promise<RecentModel | undefined>;
+      createFolderNoDialog: (
+        basePath: string,
+        name: string
+      ) => Promise<boolean>;
+      readWorkspace: (
+        folderPath: string
+      ) => Promise<WorkspaceModel | undefined>;
+      deleteFolder: (folderPath: string) => Promise<boolean>;
     };
   }
 }

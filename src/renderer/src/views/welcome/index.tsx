@@ -1,4 +1,3 @@
-import Footer from '@renderer/components/footer';
 import styles from './index.module.less';
 import {
   VscFolder,
@@ -24,73 +23,103 @@ const Welcome = () => {
     state.setRecentNote
   ]);
 
-  const handleOpenNote = async () => {
-    const res = await window.api.chooseFileMdContent();
-    if (res) {
-      const filter = recentNote.filter(
-        (item) => item.type === RecentTypeEnum.NOTE && item.path === res.path
-      );
-      setCurrentNote({
-        type: RecentTypeEnum.NOTE,
-        name: res.name,
-        path: res.path
-      });
-      if (filter === undefined || filter.length === 0) {
-        setRecentNote([
-          { type: RecentTypeEnum.NOTE, name: res.name, path: res.path },
-          ...recentNote
-        ]);
-      }
-
-      navigate('/note', { state: { note: res }, replace: true });
+  const handleOpenWorkspace = async () => {
+    const res = await window.api.chooseWorkspace();
+    if (!res) {
+      return;
     }
+    const filter = recentNote.filter((item) => item.path === res.path);
+    setCurrentNote(res);
+    if (filter === undefined || filter.length === 0) {
+      setRecentNote([res, ...recentNote]);
+    }
+    navigate('/workspace', { replace: true });
+  };
+
+  const handleCreateWorkspace = async () => {
+    const res = await window.api.createWorkspace();
+    if (!res) {
+      return;
+    }
+    const filter = recentNote.filter((item) => item.path === res.path);
+    setCurrentNote(res);
+    if (filter === undefined || filter.length === 0) {
+      setRecentNote([res, ...recentNote]);
+    }
+    console.log(res);
+    navigate('/workspace', { replace: true });
+  };
+
+  const handleOpenNote = async () => {
+    const res = await window.api.chooseNote();
+    if (!res) {
+      return;
+    }
+    const filter = recentNote.filter((item) => item.path === res.path);
+    setCurrentNote(res);
+    if (filter === undefined || filter.length === 0) {
+      setRecentNote([res, ...recentNote]);
+    }
+    navigate('/note', { replace: true });
   };
 
   const handleCreateNote = async () => {
-    const res = await window.api.createFileMd('Untitled1.md');
-    if (res) {
-      const filter = recentNote.filter(
-        (item) => item.type === RecentTypeEnum.NOTE && item.path === res.path
-      );
-      setCurrentNote({
-        type: RecentTypeEnum.NOTE,
-        name: res.name,
-        path: res.path
-      });
-      if (filter === undefined || filter.length === 0) {
-        setRecentNote([
-          { type: RecentTypeEnum.NOTE, name: res.name, path: res.path },
-          ...recentNote
-        ]);
-      }
-
-      navigate('/note', { state: { note: res }, replace: true });
+    const res = await window.api.createNote('Untitled1.md');
+    if (!res) {
+      return;
     }
+    setCurrentNote(res);
+    const filter = recentNote.filter((item) => item.path === res.path);
+    if (filter === undefined || filter.length === 0) {
+      setRecentNote([res, ...recentNote]);
+    }
+    navigate('/note', { replace: true });
   };
 
   const handleLoadCurrentNote = async () => {
     if (!currentNote) {
       return;
     }
-
-    const res = await window.api.readFileMdContent(currentNote.path);
-    console.log(res);
-    if (!res) {
-      setCurrentNote(undefined);
+    if (RecentTypeEnum.NOTE === currentNote.type) {
+      const res = await window.api.checkNoteExist(currentNote.path);
+      if (!res) {
+        setCurrentNote(undefined);
+        return;
+      }
+      navigate('/note', { replace: true });
       return;
+    } else if (RecentTypeEnum.WORKSPACE === currentNote.type) {
+      const res = await window.api.checkWorkspaceExist(currentNote.path);
+      if (!res) {
+        setCurrentNote(undefined);
+        return;
+      }
+      navigate('/workspace', { replace: true });
     }
-    navigate('/note', { state: { note: res }, replace: true });
   };
 
-  const handleOpenRecentNote = async (note: RecentModel) => {
-    const res = await window.api.readFileMdContent(note.path);
-    if (!res) {
-      const filter =
-        recentNote?.filter((item) => item.path !== note.path) || [];
-      setRecentNote([...filter]);
-      return;
+  const handleOpenRecentNote = async (recent: RecentModel) => {
+    if (RecentTypeEnum.NOTE === recent.type) {
+      const res = await window.api.checkNoteExist(recent.path);
+      if (!res) {
+        const filter =
+          recentNote?.filter((item) => item.path !== recent.path) || [];
+        setRecentNote([...filter]);
+        return;
+      }
+      setCurrentNote(recent);
+      navigate('/note', { replace: true });
+    } else if (RecentTypeEnum.WORKSPACE === recent.type) {
+      const res = await window.api.checkWorkspaceExist(recent.path);
+      if (!res) {
+        const filter =
+          recentNote?.filter((item) => item.path !== recent.path) || [];
+        setRecentNote([...filter]);
+        return;
+      }
+      setCurrentNote(recent);
+      navigate('/workspace', { replace: true });
     }
-    navigate('/note', { state: { note: res }, replace: true });
   };
 
   useEffect(() => {
@@ -105,10 +134,16 @@ const Welcome = () => {
           MarkdownNote is a simple markdown note-taking app.
         </div>
         <div className={styles['welcome-container-operate']}>
-          <div className={styles['welcome-container-operate-item']}>
+          <div
+            className={styles['welcome-container-operate-item']}
+            onClick={() => handleOpenWorkspace()}
+          >
             <VscFolder /> <span>Open Work Space</span>
           </div>
-          <div className={styles['welcome-container-operate-item']}>
+          <div
+            className={styles['welcome-container-operate-item']}
+            onClick={() => handleCreateWorkspace()}
+          >
             <VscNewFolder />
             <span>New Work Space</span>
           </div>
@@ -144,7 +179,7 @@ const Welcome = () => {
                       styles['welcome-container-recent-list-item-information']
                     }
                   >
-                    {item?.type === RecentTypeEnum.WORK_SPACE ? (
+                    {item?.type === RecentTypeEnum.WORKSPACE ? (
                       <VscFolder
                         className={
                           styles[
@@ -184,6 +219,7 @@ const Welcome = () => {
                             'welcome-container-recent-list-item-information-content-path'
                           ]
                         }
+                        title={item?.path}
                       >
                         {item?.path}
                       </div>
@@ -210,9 +246,6 @@ const Welcome = () => {
               />
             )}
           </div>
-        </div>
-        <div className={styles['welcome-container-footer']}>
-          <Footer />
         </div>
       </div>
     </>

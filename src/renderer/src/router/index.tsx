@@ -14,6 +14,10 @@ const router = createHashRouter([
       {
         path: 'note',
         Component: lazy(() => import('@renderer/views/note'))
+      },
+      {
+        path: 'workspace',
+        Component: lazy(() => import('@renderer/views/workspace'))
       }
     ]
   }

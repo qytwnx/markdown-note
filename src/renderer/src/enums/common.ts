@@ -1,4 +1,9 @@
 export enum RecentTypeEnum {
   NOTE = 'Note',
-  WORK_SPACE = 'WorkSpace'
+  WORKSPACE = 'Workspace'
+}
+
+export enum ResourceTypeEnum {
+  FILE = 'File',
+  FOLDER = 'Folder'
 }

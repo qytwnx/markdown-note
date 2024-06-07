@@ -1,40 +1,47 @@
 import MarkdownEditor from '@renderer/components/markdown-editor';
 import styles from './index.module.less';
-import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useRecentStore } from '@renderer/store';
+import { useNavigate } from 'react-router-dom';
 
 const Note = () => {
+  const navigate = useNavigate();
+  const [currentNote] = useRecentStore((state) => [
+    state.currentNote,
+    state.setCurrentNote
+  ]);
   const [note, setNote] = useState<NoteModel>({
     name: '',
     path: '',
     content: ''
   });
-  const location = useLocation();
+
+  const handleLoadNoteContent = async () => {
+    if (!currentNote?.path) {
+      navigate('/', { replace: true });
+      return;
+    }
+    const res = await window.api.readNote(currentNote?.path);
+    if (!res) {
+      navigate('/', { replace: true });
+      return;
+    }
+    setNote(res);
+  };
 
   const handleWhiteNoteToFile = async (info: NoteModel) => {
     if (!note.path) {
       return;
     }
-    const res = await window.api.writeFileMdContent(info);
+    const res = await window.api.writeNote(info);
     if (res) {
       setNote(res);
     }
   };
 
-  const links = document.querySelectorAll('a[href]');
-  links.forEach((link) => {
-    link.addEventListener('click', () => {
-      const url = link.getAttribute('href');
-      if (url) {
-        window.api.openExternal(url);
-      }
-    });
-  });
-
   useEffect(() => {
-    const { note } = location.state;
-    setNote(note);
-  }, [location.state.note]);
+    handleLoadNoteContent();
+  }, [currentNote]);
   return (
     <>
       <div className={styles['note-container']}>

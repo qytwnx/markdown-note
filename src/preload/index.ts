@@ -12,17 +12,44 @@ const api = {
   themeDarkStatus: (): Promise<boolean> => {
     return ipcRenderer.invoke('theme:dark:status');
   },
-  chooseFileMdContent: (): Promise<NoteModel | undefined> => {
-    return ipcRenderer.invoke('choose:file:md:content');
+  checkNoteExist: (filePath: string): Promise<boolean> => {
+    return ipcRenderer.invoke('check:note:exist', filePath);
   },
-  readFileMdContent: (filePath: string): Promise<NoteModel | undefined> => {
-    return ipcRenderer.invoke('read:file:md:content', filePath);
+  chooseNote: (): Promise<RecentModel | undefined> => {
+    return ipcRenderer.invoke('choose:note');
   },
-  createFileMd: (fileName: string): Promise<NoteModel | undefined> => {
-    return ipcRenderer.invoke('create:file:md', fileName);
+  createNote: (fileName: string): Promise<RecentModel | undefined> => {
+    return ipcRenderer.invoke('create:note', fileName);
   },
-  writeFileMdContent: (fileInfo: NoteModel): Promise<NoteModel> => {
-    return ipcRenderer.invoke('write:file:md:content', fileInfo);
+  createNoteNoDialog: (basePath: string, name: string): Promise<boolean> => {
+    return ipcRenderer.invoke('create:note:no:dialog', basePath, name);
+  },
+  readNote: (filePath: string): Promise<NoteModel | undefined> => {
+    return ipcRenderer.invoke('read:note', filePath);
+  },
+  writeNote: (fileInfo: NoteModel): Promise<NoteModel> => {
+    return ipcRenderer.invoke('write:note', fileInfo);
+  },
+  deleteNote: (filePath: string): Promise<boolean> => {
+    return ipcRenderer.invoke('delete:note', filePath);
+  },
+  checkWorkspaceExist: (folderPath: string): Promise<boolean> => {
+    return ipcRenderer.invoke('check:workspace:exist', folderPath);
+  },
+  chooseWorkspace: (): Promise<RecentModel | undefined> => {
+    return ipcRenderer.invoke('choose:workspace');
+  },
+  createWorkspace: (): Promise<RecentModel | undefined> => {
+    return ipcRenderer.invoke('create:workspace');
+  },
+  createFolderNoDialog: (basePath: string, name: string): Promise<boolean> => {
+    return ipcRenderer.invoke('create:folder:no:dialog', basePath, name);
+  },
+  readWorkspace: (folderPath: string): Promise<WorkspaceModel | undefined> => {
+    return ipcRenderer.invoke('read:workspace', folderPath);
+  },
+  deleteFolder: (folderPath: string): Promise<boolean> => {
+    return ipcRenderer.invoke('delete:folder', folderPath);
   }
 };
 

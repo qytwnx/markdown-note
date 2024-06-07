@@ -1,0 +1,79 @@
+.catalogue-container {
+  @apply w-80 h-full overflow-auto flex-shrink-0 p-2 border-r select-none;
+  .catalogue-container-operate {
+    @apply h-9 w-full flex items-center justify-end gap-4 px-6 border-b;
+    .catalogue-container-operate-item {
+      @apply size-5 cursor-pointer hover:text-blue-500;
+    }
+  }
+  .catalogue-container-list {
+    @apply w-full flex flex-col overflow-auto gap-2 my-4;
+    height: calc(100vh - 159px);
+    .catalogue-container-list-item {
+      @apply w-full flex flex-col gap-2 cursor-pointer;
+      .catalogue-container-list-item-information {
+        @apply flex items-center gap-1;
+        &:hover {
+          @apply text-blue-500;
+        }
+        &.active {
+          @apply text-blue-500;
+        }
+        .catalogue-container-list-item-information-icon {
+          @apply flex-shrink-0;
+        }
+        .catalogue-container-list-item-information-name {
+          @apply flex-1 text-sm overflow-hidden whitespace-nowrap text-ellipsis;
+        }
+      }
+      .catalogue-container-list-item-children {
+        @apply pl-5 flex flex-col gap-2;
+      }
+    }
+  }
+}
+
+.contextMenu {
+  @apply rounded-md;
+  button {
+    @apply bg-gray-100 dark:bg-[#2c3e50] text-black dark:text-white px-3 py-1;
+    &:hover {
+      @apply bg-gray-200 dark:bg-[#34495e];
+    }
+  }
+}
+
+.catalogue-create-modal {
+  @apply w-full absolute left-0 flex items-center justify-center  z-50;
+  top: 39px;
+  height: calc(100vh - 75);
+  .catalogue-create-modal-mask {
+    @apply w-full h-full left-0 bg-slate-200 dark:bg-slate-800 opacity-50;
+    top: 39px;
+    height: calc(100vh - 75px);
+  }
+  .catalogue-create-modal-container {
+    @apply w-80 absolute border rounded-lg bg-white dark:bg-black;
+    .catalogue-create-modal-container-header {
+      @apply border-b px-2 py-1 flex items-center justify-between;
+      .catalogue-create-modal-container-header-title {
+        @apply text-base;
+      }
+      .catalogue-create-modal-container-header-operate {
+        @apply cursor-pointer flex;
+        .catalogue-create-modal-container-header-operate-item {
+          @apply px-2 py-1 rounded-lg;
+          &:hover {
+            @apply bg-gray-300 dark:bg-slate-700;
+          }
+        }
+      }
+    }
+    .catalogue-create-modal-container-content {
+      @apply w-full h-8 rounded-b-lg;
+      .catalogue-create-modal-container-content-input {
+        @apply w-full h-full px-2 bg-none outline-none rounded-b-lg;
+      }
+    }
+  }
+}

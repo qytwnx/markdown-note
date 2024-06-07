@@ -4,6 +4,7 @@ import { useAppStore } from '@renderer/store';
 import { FaGithub } from 'react-icons/fa';
 import { MdBrightnessHigh, MdBrightness4 } from 'react-icons/md';
 import NoteOperate from './note-operate';
+import WorkspaceOperate from './workspace-operate';
 import { useLocation } from 'react-router-dom';
 
 const Header = () => {
@@ -28,6 +29,7 @@ const Header = () => {
             className={styles['header-container-information-logo']}
           />
           {location.pathname === '/note' && <NoteOperate />}
+          {location.pathname === '/workspace' && <WorkspaceOperate />}
         </div>
         <div className={styles['header-container-operate']}>
           <FaGithub

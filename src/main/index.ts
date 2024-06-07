@@ -5,7 +5,8 @@ import { MainWindowOptions } from './constants';
 import {
   registerExternalOperate,
   registerThemeOperate,
-  registerFileOperate
+  registerNoteOperate,
+  registerWorkspaceOperate
 } from './ipc';
 
 // This method will be called when Electron has finished
@@ -25,7 +26,8 @@ app.whenReady().then(() => {
   const mainWindow = createWindow(MainWindowOptions);
   registerExternalOperate();
   registerThemeOperate(mainWindow);
-  registerFileOperate(mainWindow);
+  registerNoteOperate(mainWindow);
+  registerWorkspaceOperate(mainWindow);
   if (is.dev) {
     mainWindow.webContents.openDevTools();
   }

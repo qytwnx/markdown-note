@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.less';
-import { VscTrash, VscClose } from 'react-icons/vsc';
+import { VscClose, VscTrash } from 'react-icons/vsc';
 import { useRecentStore } from '@renderer/store';
 
-const NoteOperate = () => {
+const WorkspaceOperate = () => {
   const navigate = useNavigate();
   const [currentNote, setCurrentNote] = useRecentStore((state) => [
     state.currentNote,
@@ -13,14 +13,13 @@ const NoteOperate = () => {
     state.recentNote,
     state.setRecentNote
   ]);
-
   const handleRemove = async () => {
     if (!currentNote) {
       setCurrentNote(undefined);
       navigate('/', { replace: true });
       return;
     }
-    const res = window.api.deleteNote(currentNote.path);
+    const res = window.api.deleteFolder(currentNote.path);
     if (!res) {
       return;
     }
@@ -34,17 +33,16 @@ const NoteOperate = () => {
 
   return (
     <>
-      <div className={styles['note-operate-container']}>
-        <div className={styles['note-operate-container-name']}>
+      <div className={styles['workspace-operate-container']}>
+        <div className={styles['workspace-operate-container-name']}>
           {currentNote?.name}
         </div>
-        <div>(Auto Save)</div>
         <VscTrash
-          className={styles['note-operate-container-remove']}
+          className={styles['workspace-operate-container-remove']}
           onClick={() => handleRemove()}
         />
         <VscClose
-          className={styles['note-operate-container-close']}
+          className={styles['workspace-operate-container-close']}
           onClick={() => {
             setCurrentNote(undefined);
             navigate('/', { replace: true });
@@ -55,4 +53,4 @@ const NoteOperate = () => {
   );
 };
 
-export default NoteOperate;
+export default WorkspaceOperate;

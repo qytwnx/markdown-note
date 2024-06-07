@@ -46,6 +46,16 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
   const [text, setText] = useState('');
   const isDark = useAppStore((state) => state.isDark);
 
+  const links = document.querySelectorAll('a[href]');
+  links.forEach((link) => {
+    link.addEventListener('click', () => {
+      const url = link.getAttribute('href');
+      if (url) {
+        window.api.openExternal(url);
+      }
+    });
+  });
+
   useEffect(() => {
     setText(value);
   }, [value]);
