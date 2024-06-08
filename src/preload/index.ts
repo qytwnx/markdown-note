@@ -30,6 +30,9 @@ const api = {
   writeNote: (fileInfo: NoteModel): Promise<NoteModel> => {
     return ipcRenderer.invoke('write:note', fileInfo);
   },
+  renameNote: (filePath: string, fileName: string): Promise<boolean> => {
+    return ipcRenderer.invoke('rename:note', filePath, fileName);
+  },
   deleteNote: (filePath: string): Promise<boolean> => {
     return ipcRenderer.invoke('delete:note', filePath);
   },

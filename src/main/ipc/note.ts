@@ -92,6 +92,25 @@ export default (win: BrowserWindow): void => {
     }
   );
   ipcMain.handle(
+    'rename:note',
+    (_event: IpcMainInvokeEvent, filePath: string, fileName: string) => {
+      if (!filePath || !fileName) {
+        return false;
+      }
+      try {
+        const newFilePath = path.resolve(
+          path.dirname(filePath),
+          `${fileName}.md`
+        );
+        fs.renameSync(filePath, newFilePath);
+        return true;
+      } catch (error) {
+        console.log('rename:note:error:', error);
+        return false;
+      }
+    }
+  );
+  ipcMain.handle(
     'delete:note',
     (_event: IpcMainInvokeEvent, filePath: string) => {
       if (!filePath) {

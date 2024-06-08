@@ -13,6 +13,7 @@ declare global {
       createNoteNoDialog: (basePath: string, name: string) => Promise<boolean>;
       readNote: (filePath: string) => Promise<NoteModel | undefined>;
       writeNote: (fileInfo: NoteModel) => Promise<NoteModel>;
+      renameNote: (filePath: string, fileName: string) => Promise<boolean>;
       deleteNote: (filePath: string) => Promise<boolean>;
       checkWorkspaceExist: (folderPath: string) => Promise<boolean>;
       chooseWorkspace: () => Promise<RecentModel | undefined>;

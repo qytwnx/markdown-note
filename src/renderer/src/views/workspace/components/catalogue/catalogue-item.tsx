@@ -5,11 +5,13 @@ import {
   VscNewFolder,
   VscTrash
 } from 'react-icons/vsc';
+import { BiRename } from 'react-icons/bi';
 import styles from './index.module.less';
 import { ResourceTypeEnum } from '@renderer/enums/common';
 import { useEffect, useState } from 'react';
 import { useContextMenu } from 'mantine-contextmenu';
 import CatalogueCreateModal from './catalogue-create-modal';
+import CatalogueRenameModal from './catalogue-rename-modal';
 
 interface Props {
   item: WorkspaceModel;
@@ -25,6 +27,8 @@ const CatalogueItem = ({
   reload
 }: Props) => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  const [renameModalVisible, setRenameModalVisible] = useState<boolean>(false);
+
   const [newResourceType, setNewResourceType] = useState<ResourceTypeEnum>(
     ResourceTypeEnum.FOLDER
   );
@@ -93,7 +97,7 @@ const CatalogueItem = ({
             ResourceTypeEnum.FOLDER === data.type
               ? [
                   {
-                    key: 'delete',
+                    key: 'Delete',
                     icon: <VscTrash size={16} />,
                     title: 'Delete',
                     onClick: () => handleRemove()
@@ -118,6 +122,14 @@ const CatalogueItem = ({
                   }
                 ]
               : [
+                  {
+                    key: 'Rename',
+                    icon: <BiRename size={16} />,
+                    title: 'Rename',
+                    onClick: () => {
+                      setRenameModalVisible(true);
+                    }
+                  },
                   {
                     key: 'delete',
                     icon: <VscTrash size={16} />,
@@ -179,6 +191,20 @@ const CatalogueItem = ({
         }}
         onCancel={() => {
           setCreateModalVisible(false);
+        }}
+      />
+      <CatalogueRenameModal
+        modalVisible={renameModalVisible}
+        resource={data}
+        onSubmit={(value: WorkspaceModel) => {
+          if (currentWorkspaceNote && currentWorkspaceNote.path === data.path) {
+            onCurrentWorkspaceNoteChange(value);
+          }
+          reload();
+          setRenameModalVisible(false);
+        }}
+        onCancel={() => {
+          setRenameModalVisible(false);
         }}
       />
     </>

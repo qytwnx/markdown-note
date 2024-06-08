@@ -42,29 +42,21 @@ const CatalogueCreateModal = ({
   return (
     <>
       {modalVisible && (
-        <div className={styles['catalogue-create-modal']}>
-          <div className={styles['catalogue-create-modal-mask']}></div>
-          <div className={styles['catalogue-create-modal-container']}>
-            <div className={styles['catalogue-create-modal-container-header']}>
-              <div
-                className={
-                  styles['catalogue-create-modal-container-header-title']
-                }
-              >
+        <div className={styles['catalogue-modal']}>
+          <div className={styles['catalogue-modal-mask']}></div>
+          <div className={styles['catalogue-modal-container']}>
+            <div className={styles['catalogue-modal-container-header']}>
+              <div className={styles['catalogue-modal-container-header-title']}>
                 {ResourceTypeEnum.FILE === resourceType
                   ? 'New Note'
                   : 'New Folder'}
               </div>
               <div
-                className={
-                  styles['catalogue-create-modal-container-header-operate']
-                }
+                className={styles['catalogue-modal-container-header-operate']}
               >
                 <button
                   className={
-                    styles[
-                      'catalogue-create-modal-container-header-operate-item'
-                    ]
+                    styles['catalogue-modal-container-header-operate-item']
                   }
                   onClick={() => handleCreate()}
                 >
@@ -72,9 +64,7 @@ const CatalogueCreateModal = ({
                 </button>
                 <button
                   className={
-                    styles[
-                      'catalogue-create-modal-container-header-operate-item'
-                    ]
+                    styles['catalogue-modal-container-header-operate-item']
                   }
                   onClick={() => {
                     setName('');
@@ -85,12 +75,10 @@ const CatalogueCreateModal = ({
                 </button>
               </div>
             </div>
-            <div className={styles['catalogue-create-modal-container-content']}>
+            <div className={styles['catalogue-modal-container-content']}>
               {ResourceTypeEnum.FILE === resourceType && (
                 <input
-                  className={
-                    styles['catalogue-create-modal-container-content-input']
-                  }
+                  className={styles['catalogue-modal-container-content-input']}
                   type="text"
                   placeholder="please input file name"
                   autoFocus
@@ -102,9 +90,7 @@ const CatalogueCreateModal = ({
               )}
               {ResourceTypeEnum.FOLDER === resourceType && (
                 <input
-                  className={
-                    styles['catalogue-create-modal-container-content-input']
-                  }
+                  className={styles['catalogue-modal-container-content-input']}
                   type="text"
                   placeholder="please input folder name"
                   autoFocus
