@@ -3,9 +3,11 @@ import styles from './index.module.less';
 import { useEffect, useState } from 'react';
 import { useRecentStore } from '@renderer/store';
 import { useNavigate } from 'react-router-dom';
+import { Box, LoadingOverlay } from '@mantine/core';
 
 const Note = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentNote] = useRecentStore((state) => [
     state.currentNote,
     state.setCurrentNote
@@ -17,6 +19,7 @@ const Note = () => {
   });
 
   const handleLoadNoteContent = async () => {
+    setLoading(true);
     if (!currentNote?.path) {
       navigate('/', { replace: true });
       return;
@@ -27,6 +30,7 @@ const Note = () => {
       return;
     }
     setNote(res);
+    setLoading(false);
   };
 
   const handleWhiteNoteToFile = async (info: NoteModel) => {
@@ -44,7 +48,13 @@ const Note = () => {
   }, [currentNote]);
   return (
     <>
-      <div className={styles['note-container']}>
+      <Box pos="relative" className={styles['note-container']}>
+        <LoadingOverlay
+          visible={loading}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+          loaderProps={{ color: 'blue', type: 'bars' }}
+        />
         <MarkdownEditor
           value={note.content}
           onChange={(value: string) =>
@@ -54,7 +64,7 @@ const Note = () => {
             handleWhiteNoteToFile({ ...note, content: value })
           }
         />
-      </div>
+      </Box>
     </>
   );
 };

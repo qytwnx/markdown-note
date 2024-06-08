@@ -4,8 +4,10 @@ import styles from './index.module.less';
 import { useEffect, useState } from 'react';
 import { ResourceTypeEnum } from '@renderer/enums/common';
 import EmptySvg from '@renderer/assets/images/empty.svg';
+import { Box, LoadingOverlay } from '@mantine/core';
 
 const WorkSpace = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentWorkspaceNote, setCurrentWorkspaceNote] =
     useState<WorkspaceModel>({
       name: '',
@@ -21,14 +23,28 @@ const WorkSpace = () => {
   });
 
   const handleLoadNoteContent = async () => {
+    setLoading(true);
     if (!currentWorkspaceNote?.path) {
+      setNote({
+        name: '',
+        content: '',
+        path: ''
+      });
+      setLoading(false);
       return;
     }
     const res = await window.api.readNote(currentWorkspaceNote?.path);
     if (!res) {
+      setNote({
+        name: '',
+        content: '',
+        path: ''
+      });
+      setLoading(false);
       return;
     }
-    setNote(res);
+    setNote({ ...res });
+    setLoading(false);
   };
 
   const handleWhiteNoteToFile = async (info: NoteModel) => {
@@ -54,19 +70,31 @@ const WorkSpace = () => {
             setCurrentWorkspaceNote(current)
           }
         />
-        <div className="h-full flex-1 flex justify-center items-center">
-          {currentWorkspaceNote.path ? (
-            <div className="w-full h-full flex flex-col">
-              <div className="flex-shrink-0 flex items-center justify-between py-3 px-1">
+        <Box pos="relative" className={styles['work-space-container-main']}>
+          <LoadingOverlay
+            visible={loading}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+            loaderProps={{ color: 'blue', type: 'bars' }}
+          />
+          {currentWorkspaceNote?.path && note?.path && !loading ? (
+            <div className={styles['work-space-container-main-editor']}>
+              <div
+                className={styles['work-space-container-main-editor-header']}
+              >
                 <div
                   title={note.name}
-                  className="font-bold overflow-hidden whitespace-nowrap text-ellipsis"
+                  className={
+                    styles['work-space-container-main-editor-header-name']
+                  }
                 >
                   {note.name}
                 </div>
                 <div
                   title={note.path}
-                  className="text-sm overflow-hidden whitespace-nowrap text-ellipsis"
+                  className={
+                    styles['work-space-container-main-editor-header-path']
+                  }
                 >
                   {note.path}
                 </div>
@@ -82,12 +110,12 @@ const WorkSpace = () => {
               />
             </div>
           ) : (
-            <div className="flex flex-col items-center">
+            <div className={styles['work-space-container-main-empty']}>
               <img src={EmptySvg} alt="empty" className="size-60" />
               <div>Please select Note</div>
             </div>
           )}
-        </div>
+        </Box>
       </div>
     </>
   );

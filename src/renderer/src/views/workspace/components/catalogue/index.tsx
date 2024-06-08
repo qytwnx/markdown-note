@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ResourceTypeEnum } from '@renderer/enums/common';
 import { useNavigate } from 'react-router-dom';
 import { useRecentStore } from '@renderer/store';
+import { Box, LoadingOverlay } from '@mantine/core';
 
 interface Props {
   currentWorkspaceNote: WorkspaceModel;
@@ -17,6 +18,7 @@ const Catalogue = ({
   onCurrentWorkspaceNoteChange
 }: Props) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [newResourceType, setNewResourceType] = useState<ResourceTypeEnum>(
     ResourceTypeEnum.FOLDER
@@ -35,6 +37,7 @@ const Catalogue = ({
   ]);
 
   const handleLoadWorkspaceContent = async () => {
+    setLoading(true);
     if (!currentNote?.path) {
       navigate('/', { replace: true });
       return;
@@ -45,6 +48,7 @@ const Catalogue = ({
       return;
     }
     setWorkspaceInformation(res);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -53,7 +57,13 @@ const Catalogue = ({
 
   return (
     <>
-      <div className={styles['catalogue-container']}>
+      <Box pos="relative" className={styles['catalogue-container']}>
+        <LoadingOverlay
+          visible={loading}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+          loaderProps={{ color: 'blue', type: 'bars' }}
+        />
         <div className={styles['catalogue-container-operate']}>
           <VscNewFolder
             title="New Folder"
@@ -85,7 +95,7 @@ const Catalogue = ({
             )
           )}
         </div>
-      </div>
+      </Box>
       <CatalogueCreateModal
         modalVisible={createModalVisible}
         resourceType={newResourceType}

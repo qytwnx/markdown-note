@@ -1,3 +1,21 @@
 .work-space-container {
   @apply w-full h-full flex gap-2;
+  .work-space-container-main {
+    @apply h-full flex-1 flex justify-center items-center;
+    .work-space-container-main-editor {
+      @apply w-full h-full flex flex-col;
+      .work-space-container-main-editor-header {
+        @apply flex-shrink-0 flex items-center justify-between py-3 px-1;
+        .work-space-container-main-editor-header-name {
+          @apply font-bold overflow-hidden whitespace-nowrap text-ellipsis;
+        }
+        .work-space-container-main-editor-header-path {
+          @apply text-sm overflow-hidden whitespace-nowrap text-ellipsis;
+        }
+      }
+    }
+    .work-space-container-main-empty {
+      @apply flex flex-col items-center;
+    }
+  }
 }
