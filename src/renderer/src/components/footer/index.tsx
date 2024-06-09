@@ -5,7 +5,8 @@ const Footer = () => {
   return (
     <>
       <footer className={styles['footer-container']}>
-        v{Config.version} Copyright © 2024 - All right reserved by QYT-WNX
+        <span>Version: {Config.version}</span>
+        <span>Copyright © 2024 - All right reserved by QYT-WNX</span>
       </footer>
     </>
   );
