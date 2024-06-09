@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react';
-import { MdEditor, UploadImgCallBackParam, config } from 'md-editor-rt';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ExposeParam,
+  MdEditor,
+  UploadImgCallBackParam,
+  config
+} from 'md-editor-rt';
 import TimeNow from '@renderer/components/utils/time-now';
 import { useAppStore } from '@renderer/store';
 import 'md-editor-rt/lib/style.css';
@@ -50,16 +55,7 @@ config({
 const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
   const [text, setText] = useState('');
   const isDark = useAppStore((state) => state.isDark);
-
-  const links = document.querySelectorAll('a[href]');
-  links.forEach((link) => {
-    link.addEventListener('click', () => {
-      const url = link.getAttribute('href');
-      if (url) {
-        window.api.openExternal(url);
-      }
-    });
-  });
+  const editorRef = useRef<ExposeParam>(null);
 
   const handleUploadImage = async (
     files: Array<File>,
@@ -85,11 +81,25 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
 
   useEffect(() => {
     setText(value);
+    editorRef.current?.togglePreview(false);
+    editorRef.current?.on('preview', () => {
+      const links = document.querySelectorAll('a[href]');
+      links.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const url = link.getAttribute('href');
+          if (url) {
+            window.api.openExternal(url);
+          }
+        });
+      });
+    });
   }, [value]);
 
   return (
     <>
       <MdEditor
+        ref={editorRef}
         placeholder="Please enter markdown content"
         theme={isDark ? 'dark' : 'light'}
         language="en-US"
@@ -101,6 +111,7 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
         noIconfont
         noPrettier
         noImgZoomIn
+        preview={false}
         onSave={(value: string) => {
           onSave(value);
         }}
