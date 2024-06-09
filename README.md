@@ -1,6 +1,6 @@
 # markdown-note
 
-> Markdown note management tool based on electron
+> Markdown local note management tool based on electron
 >
 > - Note Editor
 > - Workspace Editor

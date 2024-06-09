@@ -1,7 +1,7 @@
 {
   "name": "markdown-note",
-  "version": "1.0.1",
-  "description": "Markdown note management tool based on Electron",
+  "version": "1.0.2",
+  "description": "Markdown local note management tool based on electron",
   "main": "./out/main/index.js",
   "author": "QYT-WNX",
   "homepage": "https://github.com/qytwnx",
@@ -30,6 +30,7 @@
     "@mantine/hooks": "^7.10.1",
     "@vavt/rt-extension": "^1.2.2",
     "clsx": "^2.1.1",
+    "cropperjs": "^1.6.2",
     "dayjs": "^1.11.11",
     "electron-updater": "^6.1.7",
     "highlight.js": "^11.9.0",

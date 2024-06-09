@@ -26,6 +26,10 @@ declare global {
         folderPath: string
       ) => Promise<WorkspaceModel | undefined>;
       deleteFolder: (folderPath: string) => Promise<boolean>;
+      uploadImage: (file: {
+        name: string;
+        data: ArrayBuffer;
+      }) => Promise<UploadImageModel>;
     };
   }
 }

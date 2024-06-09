@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, net, protocol } from 'electron';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { createWindow } from './config';
 import { MainWindowOptions } from './constants';
@@ -6,8 +6,11 @@ import {
   registerExternalOperate,
   registerThemeOperate,
   registerNoteOperate,
-  registerWorkspaceOperate
+  registerWorkspaceOperate,
+  registerFileOperate
 } from './ipc';
+import url from 'node:url';
+import path from 'node:path';
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -15,6 +18,13 @@ import {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.qytwnx');
+
+  protocol.handle('atom', (request) => {
+    const filePath = request.url.slice('atom:///'.length);
+    return net.fetch(
+      url.pathToFileURL(path.resolve(decodeURI(filePath))).toString()
+    );
+  });
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -28,6 +38,7 @@ app.whenReady().then(() => {
   registerThemeOperate(mainWindow);
   registerNoteOperate(mainWindow);
   registerWorkspaceOperate(mainWindow);
+  registerFileOperate();
   if (is.dev) {
     mainWindow.webContents.openDevTools();
   }

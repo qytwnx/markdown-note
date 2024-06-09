@@ -3,3 +3,9 @@ type RecentModel = {
   name: string;
   path: string;
 };
+
+type UploadImageModel = {
+  url: string;
+  alt: string;
+  title: string;
+};

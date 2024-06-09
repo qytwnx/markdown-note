@@ -53,6 +53,12 @@ const api = {
   },
   deleteFolder: (folderPath: string): Promise<boolean> => {
     return ipcRenderer.invoke('delete:folder', folderPath);
+  },
+  uploadImage: (file: {
+    name: string;
+    data: ArrayBuffer;
+  }): Promise<UploadImageModel> => {
+    return ipcRenderer.invoke('upload:image', file);
   }
 };
 

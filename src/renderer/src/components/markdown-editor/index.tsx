@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { MdEditor, config } from 'md-editor-rt';
+import { MdEditor, UploadImgCallBackParam, config } from 'md-editor-rt';
 import TimeNow from '@renderer/components/utils/time-now';
 import { useAppStore } from '@renderer/store';
 import 'md-editor-rt/lib/style.css';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import Cropper from 'cropperjs';
+import 'cropperjs/dist/cropper.css';
 import mermaid from 'mermaid';
 import highlight from 'highlight.js';
 import screenfull from 'screenfull';
@@ -33,6 +35,9 @@ config({
     katex: {
       instance: katex
     },
+    cropper: {
+      instance: Cropper
+    },
     mermaid: {
       instance: mermaid
     },
@@ -56,6 +61,28 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
     });
   });
 
+  const handleUploadImage = async (
+    files: Array<File>,
+    callback: (images: UploadImgCallBackParam) => void
+  ) => {
+    const res = await Promise.all(
+      files.map((file) => {
+        return new Promise((rev, rej) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const data = reader.result as ArrayBuffer;
+            window.api
+              .uploadImage({ name: file.name, data: data })
+              .then((res: any) => rev(res))
+              .catch((error: any) => rej(error));
+          };
+          reader.readAsArrayBuffer(file);
+        });
+      })
+    );
+    callback(res as UploadImgCallBackParam);
+  };
+
   useEffect(() => {
     setText(value);
   }, [value]);
@@ -72,9 +99,8 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
         modelValue={text}
         autoDetectCode
         noIconfont
-        noUploadImg
-        noImgZoomIn
         noPrettier
+        noImgZoomIn
         onSave={(value: string) => {
           onSave(value);
         }}
@@ -95,6 +121,7 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
           'codeRow',
           'code',
           'link',
+          'image',
           'table',
           'mermaid',
           'katex',
@@ -108,6 +135,7 @@ const MarkdownEditor = ({ value, onChange, onSave }: Props) => {
           'htmlPreview',
           'catalog'
         ]}
+        onUploadImg={handleUploadImage}
         onChange={(value: string) => onChange(value)}
         footers={['markdownTotal', '=', 0, 'scrollSwitch']}
         defFooters={[<TimeNow key="time-now" />]}
