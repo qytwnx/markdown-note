@@ -112,7 +112,7 @@ const WorkSpace = () => {
           ) : (
             <div className={styles['work-space-container-main-empty']}>
               <img src={EmptySvg} alt="empty" className="size-60" />
-              <div>Please select Note</div>
+              <div>Please select note</div>
             </div>
           )}
         </Box>
