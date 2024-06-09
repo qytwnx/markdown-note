@@ -44,7 +44,14 @@ const CatalogueCreateModal = ({
       {modalVisible && (
         <div className={styles['catalogue-modal']}>
           <div className={styles['catalogue-modal-mask']}></div>
-          <div className={styles['catalogue-modal-container']}>
+          <div
+            className={styles['catalogue-modal-container']}
+            onKeyUp={(e) => {
+              if (e.key.toLowerCase() === 'enter') {
+                handleCreate();
+              }
+            }}
+          >
             <div className={styles['catalogue-modal-container-header']}>
               <div className={styles['catalogue-modal-container-header-title']}>
                 {ResourceTypeEnum.FILE === resourceType
