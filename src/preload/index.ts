@@ -59,6 +59,12 @@ const api = {
     data: ArrayBuffer;
   }): Promise<UploadImageModel> => {
     return ipcRenderer.invoke('upload:image', file);
+  },
+  windowOnTopToggle: (status: boolean): Promise<boolean> => {
+    return ipcRenderer.invoke('window:on:top:toggle', status);
+  },
+  windowOnTopStatus: (): Promise<boolean> => {
+    return ipcRenderer.invoke('window:on:top:status');
   }
 };
 

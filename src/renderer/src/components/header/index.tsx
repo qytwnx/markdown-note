@@ -3,6 +3,7 @@ import LogoSvg from '@renderer/assets/images/logo.svg';
 import { useAppStore } from '@renderer/store';
 import { FaGithub } from 'react-icons/fa';
 import { MdBrightnessHigh, MdBrightness4 } from 'react-icons/md';
+import { TbPinned, TbPinnedFilled } from 'react-icons/tb';
 import NoteOperate from './note-operate';
 import WorkspaceOperate from './workspace-operate';
 import { useLocation } from 'react-router-dom';
@@ -13,10 +14,19 @@ const Header = () => {
     state.isDark,
     state.setIsDark
   ]);
+  const [onTop, setOnTop] = useAppStore((state) => [
+    state.onTop,
+    state.setOnTop
+  ]);
 
   const handleThemeDarkToggle = async (mode: 'light' | 'dark') => {
     const status = await window.api.themeDarkToggle(mode);
     setIsDark(status);
+  };
+
+  const handleWindowOnTopToggle = async () => {
+    const status = await window.api.windowOnTopToggle(!onTop);
+    setOnTop(status);
   };
 
   return (
@@ -45,6 +55,17 @@ const Header = () => {
             <MdBrightness4
               className={styles['header-container-operate-item']}
               onClick={() => handleThemeDarkToggle('dark')}
+            />
+          )}
+          {onTop ? (
+            <TbPinnedFilled
+              className={styles['header-container-operate-item']}
+              onClick={handleWindowOnTopToggle}
+            />
+          ) : (
+            <TbPinned
+              className={styles['header-container-operate-item']}
+              onClick={handleWindowOnTopToggle}
             />
           )}
         </div>

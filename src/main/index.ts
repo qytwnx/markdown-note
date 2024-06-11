@@ -7,7 +7,8 @@ import {
   registerThemeOperate,
   registerNoteOperate,
   registerWorkspaceOperate,
-  registerFileOperate
+  registerFileOperate,
+  registerWindowOperate
 } from './ipc';
 import url from 'node:url';
 import path from 'node:path';
@@ -39,6 +40,7 @@ app.whenReady().then(() => {
   registerNoteOperate(mainWindow);
   registerWorkspaceOperate(mainWindow);
   registerFileOperate();
+  registerWindowOperate(mainWindow);
   if (is.dev) {
     mainWindow.webContents.openDevTools();
   }

@@ -14,6 +14,10 @@ const App = (): JSX.Element => {
     state.isDark,
     state.setIsDark
   ]);
+  const [onTop, setOnTop] = useAppStore((state) => [
+    state.onTop,
+    state.setOnTop
+  ]);
 
   const handleLoadThemeDarkStatus = async () => {
     if (isDark !== undefined) {
@@ -24,8 +28,18 @@ const App = (): JSX.Element => {
     setIsDark(status);
   };
 
+  const handleLoadWindowOnTopStatus = async () => {
+    if (onTop !== undefined) {
+      window.api.windowOnTopToggle(onTop);
+      return;
+    }
+    const status = await window.api.windowOnTopStatus();
+    setOnTop(status);
+  };
+
   useEffect(() => {
     handleLoadThemeDarkStatus();
+    handleLoadWindowOnTopStatus();
   }, []);
 
   return (

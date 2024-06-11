@@ -30,6 +30,8 @@ declare global {
         name: string;
         data: ArrayBuffer;
       }) => Promise<UploadImageModel>;
+      windowOnTopToggle: (status: boolean) => Promise<boolean>;
+      windowOnTopStatus: () => Promise<boolean>;
     };
   }
 }

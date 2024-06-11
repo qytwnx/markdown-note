@@ -1,6 +1,6 @@
 {
   "name": "markdown-note",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Markdown local note management tool based on electron",
   "main": "./out/main/index.js",
   "author": "QYT-WNX",
